@@ -37,10 +37,11 @@ func calculate(operation string, slice []float64) float64 {
 		result = sum / float64(len(slice))
 	case MED:
 		sortedSlice := sort.Float64Slice(slice)
+		sortedSlice.Sort()
 		if len(sortedSlice)%2 == 0 {
-			result += (sortedSlice[len(sortedSlice)/2] + sortedSlice[len(sortedSlice)/2+1]) / 2
+			result += (sortedSlice[len(sortedSlice)/2-1] + sortedSlice[len(sortedSlice)/2]) / 2
 		} else {
-			result = slice[len(slice)/2]
+			result = sortedSlice[len(slice)/2]
 		}
 	}
 
