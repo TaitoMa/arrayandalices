@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -35,7 +36,12 @@ func calculate(operation string, slice []float64) float64 {
 		}
 		result = sum / float64(len(slice))
 	case MED:
-		result = slice[len(slice)/2]
+		sortedSlice := sort.Float64Slice(slice)
+		if len(sortedSlice)%2 == 0 {
+			result += (sortedSlice[len(sortedSlice)/2] + sortedSlice[len(sortedSlice)/2+1]) / 2
+		} else {
+			result = slice[len(slice)/2]
+		}
 	}
 
 	return result
@@ -66,7 +72,10 @@ func getSlice() []float64 {
 	trimmed := strings.TrimSpace(str)
 	splitted := strings.Split(trimmed, ",")
 	for _, s := range splitted {
-		num, _ := strconv.ParseFloat(s, 64)
+		num, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+			continue
+		}
 		slice = append(slice, num)
 	}
 
