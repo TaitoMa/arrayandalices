@@ -22,20 +22,25 @@ func main() {
 	fmt.Println(result)
 }
 
-func calculate(operation string, slice []float64) float64 {
-	var result float64
-	switch operation {
-	case SUM:
+var calculateMap = map[string]func([]float64) float64{
+	"SUM": func(slice []float64) float64 {
+		var result float64
 		for _, v := range slice {
 			result += v
 		}
-	case AVG:
+		return result
+	},
+	"AVG": func(slice []float64) float64 {
+		var result float64
 		var sum float64
 		for _, v := range slice {
 			sum += v
 		}
 		result = sum / float64(len(slice))
-	case MED:
+		return result
+	},
+	"MED": func(slice []float64) float64 {
+		var result float64
 		sortedSlice := sort.Float64Slice(slice)
 		sortedSlice.Sort()
 		if len(sortedSlice)%2 == 0 {
@@ -43,7 +48,12 @@ func calculate(operation string, slice []float64) float64 {
 		} else {
 			result = sortedSlice[len(slice)/2]
 		}
-	}
+		return result
+	},
+}
+
+func calculate(operation string, slice []float64) float64 {
+	result := calculateMap[operation](slice)
 
 	return result
 }
